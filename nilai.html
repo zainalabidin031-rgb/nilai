@@ -3,10 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pantauan Nilai Siswa</title>
+    <title>Portal Nilai Semua Mata Pelajaran</title>
     <style>
         body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #f4f6f9; margin: 0; padding: 20px; }
-        .container { max-width: 800px; margin: 30px auto; background: white; padding: 25px; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+        .container { max-width: 850px; margin: 30px auto; background: white; padding: 25px; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
         h2 { color: #2c3e50; text-align: center; margin-bottom: 20px; }
         .search-box { width: 100%; padding: 12px 20px; margin-bottom: 20px; border: 2px solid #ddd; border-radius: 6px; box-sizing: border-box; font-size: 16px; transition: 0.3s; }
         .search-box:focus { border-color: #3498db; outline: none; }
@@ -16,15 +16,16 @@
         tr:hover { background-color: #f5f5f5; }
         .no-data { text-align: center; color: #888; padding: 20px; }
         .loading { text-align: center; font-weight: bold; color: #3498db; }
+        .badge-mapel { background: #e3f2fd; color: #0d47a1; padding: 4px 8px; border-radius: 4px; font-size: 13px; font-weight: 600; }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <h2>📊 Portal Pantauan Nilai Siswa</h2>
-    <p style="text-align: center; color: #7f8c8d;">Orang tua dapat memantau hasil ujian anak secara real-time.</p>
+    <h2>📊 Portal Nilai Ujian Siswa</h2>
+    <p style="text-align: center; color: #7f8c8d;">Ketik nama siswa untuk melihat rekapitulasi nilai semua mata pelajaran.</p>
     
-    <input type="text" id="search-input" class="search-box" placeholder="🔍 Ketik nama anak Anda di sini untuk mencari..." onkeyup="searchName()">
+    <input type="text" id="search-input" class="search-box" placeholder="🔍 Ketik nama anak Anda di sini..." onkeyup="searchName()">
 
     <div id="loading-text" class="loading">Memuat data nilai dari server...</div>
     <table id="value-table" style="display: none;">
@@ -32,20 +33,19 @@
             <tr>
                 <th>Waktu Selesai</th>
                 <th>Nama Siswa</th>
+                <th>Mata Pelajaran</th>
                 <th>Nilai Ujian</th>
             </tr>
         </thead>
         <tbody id="table-body">
-            </tbody>
+        </tbody>
     </table>
     <div id="empty-message" class="no-data" style="display: none;">Nama siswa tidak ditemukan.</div>
 </div>
 
 <script>
-    // --- GANTI DENGAN LINK WEB APP GOOGLE SCRIPT ANDA ---
-    const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxWr1p3PxDKAjnrx6PlgNsL4OO6kRHyb5l6ib3mV1pjeuhRAVeVeVsBmWZP7Rze-8xd/exec";
+    const GOOGLE_SCRIPT_URL = "URL_GOOGLE_SCRIPT_ANDA_DI_SINI"; // 👈 Masukkan URL Apps Script Anda
 
-    // Fungsi mengambil data dari Google Sheets via Google Apps Script
     async function loadData() {
         try {
             const response = await fetch(GOOGLE_SCRIPT_URL + "?action=read");
@@ -60,28 +60,25 @@
                 return;
             }
 
-            // Susun data ke tabel (Diurutkan dari yang terbaru di paling atas)
             data.reverse().forEach(row => {
                 const tr = document.createElement("tr");
-                
-                // Format tanggal agar lebih rapi
                 const date = new Date(row.waktu);
                 const formattedDate = date.toLocaleDateString('id-ID') + " - " + date.toLocaleTimeString('id-ID', {hour: '2-digit', minute:'2-digit'});
 
                 tr.innerHTML = `
                     <td>${formattedDate} WIB</td>
                     <td class="student-name"><strong>${row.nama}</strong></td>
-                    <td style="color: #2e7d32; font-weight: bold;">${row.nilai}</td>
+                    <td><span class="badge-mapel">${row.mapel}</span></td>
+                    <td style="color: #2e7d32; font-weight: bold; font-size: 16px;">${row.nilai}</td>
                 `;
                 tbody.appendChild(tr);
             });
         } catch (error) {
-            document.getElementById("loading-text").innerText = "Gagal memuat data. Pastikan setelan Apps Script sudah benar.";
+            document.getElementById("loading-text").innerText = "Gagal memuat data.";
             console.error(error);
         }
     }
 
-    // Fungsi Pencarian Real-time
     function searchName() {
         const input = document.getElementById("search-input").value.toUpperCase();
         const rows = document.getElementById("table-body").getElementsByTagName("tr");
@@ -99,14 +96,10 @@
                 }
             }
         }
-
-        const emptyMsg = document.getElementById("empty-message");
-        emptyMsg.style.display = found ? "none" : "block";
+        document.getElementById("empty-message").style.display = found ? "none" : "block";
     }
 
-    // Jalankan fungsi muat data saat halaman dibuka
     window.onload = loadData;
 </script>
-
 </body>
 </html>
