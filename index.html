@@ -215,6 +215,7 @@
 
         const formData = new FormData();
         formData.append("nama", name);
+        formData.append("mapel", "Matematika");
         formData.append("nilai", score);
 
         fetch(GOOGLE_SCRIPT_URL, { method: "POST", body: formData })
