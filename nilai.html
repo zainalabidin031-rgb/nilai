@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pantauan Nilai Siswa</title>
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #f4f6f9; margin: 0; padding: 20px; }
+        .container { max-width: 800px; margin: 30px auto; background: white; padding: 25px; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+        h2 { color: #2c3e50; text-align: center; margin-bottom: 20px; }
+        .search-box { width: 100%; padding: 12px 20px; margin-bottom: 20px; border: 2px solid #ddd; border-radius: 6px; box-sizing: border-box; font-size: 16px; transition: 0.3s; }
+        .search-box:focus { border-color: #3498db; outline: none; }
+        table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+        th, td { padding: 12px 15px; text-align: left; border-bottom: 1px solid #ddd; }
+        th { background-color: #2c3e50; color: white; }
+        tr:hover { background-color: #f5f5f5; }
+        .no-data { text-align: center; color: #888; padding: 20px; }
+        .loading { text-align: center; font-weight: bold; color: #3498db; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>📊 Portal Pantauan Nilai Siswa</h2>
+    <p style="text-align: center; color: #7f8c8d;">Orang tua dapat memantau hasil ujian anak secara real-time.</p>
+    
+    <input type="text" id="search-input" class="search-box" placeholder="🔍 Ketik nama anak Anda di sini untuk mencari..." onkeyup="searchName()">
+
+    <div id="loading-text" class="loading">Memuat data nilai dari server...</div>
+    <table id="value-table" style="display: none;">
+        <thead>
+            <tr>
+                <th>Waktu Selesai</th>
+                <th>Nama Siswa</th>
+                <th>Nilai Ujian</th>
+            </tr>
+        </thead>
+        <tbody id="table-body">
+            </tbody>
+    </table>
+    <div id="empty-message" class="no-data" style="display: none;">Nama siswa tidak ditemukan.</div>
+</div>
+
+<script>
+    // --- GANTI DENGAN LINK WEB APP GOOGLE SCRIPT ANDA ---
+    const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxWr1p3PxDKAjnrx6PlgNsL4OO6kRHyb5l6ib3mV1pjeuhRAVeVeVsBmWZP7Rze-8xd/exec";
+
+    // Fungsi mengambil data dari Google Sheets via Google Apps Script
+    async function loadData() {
+        try {
+            const response = await fetch(GOOGLE_SCRIPT_URL + "?action=read");
+            const data = await response.json();
+            
+            const tbody = document.getElementById("table-body");
+            document.getElementById("loading-text").style.display = "none";
+            document.getElementById("value-table").style.display = "table";
+
+            if (data.length === 0) {
+                document.getElementById("empty-message").style.display = "block";
+                return;
+            }
+
+            // Susun data ke tabel (Diurutkan dari yang terbaru di paling atas)
+            data.reverse().forEach(row => {
+                const tr = document.createElement("tr");
+                
+                // Format tanggal agar lebih rapi
+                const date = new Date(row.waktu);
+                const formattedDate = date.toLocaleDateString('id-ID') + " - " + date.toLocaleTimeString('id-ID', {hour: '2-digit', minute:'2-digit'});
+
+                tr.innerHTML = `
+                    <td>${formattedDate} WIB</td>
+                    <td class="student-name"><strong>${row.nama}</strong></td>
+                    <td style="color: #2e7d32; font-weight: bold;">${row.nilai}</td>
+                `;
+                tbody.appendChild(tr);
+            });
+        } catch (error) {
+            document.getElementById("loading-text").innerText = "Gagal memuat data. Pastikan setelan Apps Script sudah benar.";
+            console.error(error);
+        }
+    }
+
+    // Fungsi Pencarian Real-time
+    function searchName() {
+        const input = document.getElementById("search-input").value.toUpperCase();
+        const rows = document.getElementById("table-body").getElementsByTagName("tr");
+        let found = false;
+
+        for (let i = 0; i < rows.length; i++) {
+            const nameTd = rows[i].getElementsByClassName("student-name")[0];
+            if (nameTd) {
+                const nameText = nameTd.textContent || nameTd.innerText;
+                if (nameText.toUpperCase().indexOf(input) > -1) {
+                    rows[i].style.display = "";
+                    found = true;
+                } else {
+                    rows[i].style.display = "none";
+                }
+            }
+        }
+
+        const emptyMsg = document.getElementById("empty-message");
+        emptyMsg.style.display = found ? "none" : "block";
+    }
+
+    // Jalankan fungsi muat data saat halaman dibuka
+    window.onload = loadData;
+</script>
+
+</body>
+</html>
