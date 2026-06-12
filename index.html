@@ -47,7 +47,7 @@
     <div class="main-box">
         <div class="header-cbt">
             <span id="question-title" style="font-weight: bold; color: var(--primary);">Soal Nomor 1</span>
-            <div class="timer">Sisa Waktu: <span id="time-display">10:00</span></div>
+            <div class="timer">Sisa Waktu: <span id="time-display">30:00</span></div>
         </div>
         
         <div id="quiz-area">
@@ -77,13 +77,33 @@
 </div>
 
 <script>
-    // --- KONFIGURASI SOAL ---
+    // --- KONFIGURASI SOAL (25 Soal Bahasa Indonesia & Umum) ---
     const questions = [
-        { q: "Apa ibu kota negara Indonesia saat ini?", o: ["Surabaya", "Jakarta", "Bandung", "IKN Nusantara"], a: 1 },
-        { q: "Berapakah hasil dari 5 + 5 x 2?", o: ["20", "15", "25", "30"], a: 1 },
-        { q: "Planet terdekat dari Matahari adalah...", o: ["Mars", "Venus", "Merkurius", "Yupiter"], a: 2 },
-        { q: "Mamalia yang bertelur adalah...", o: ["Lumba-lumba", "Platypus", "Kanguru", "Kelelawar"], a: 1 },
-        { q: "Lambang sila ke-3 Pancasila adalah...", o: ["Pohon Beringin", "Rantai", "Bintang", "Kepala Banteng"], a: 0 }
+        { q: "Ide pokok atau gagasan utama dalam sebuah paragraf biasanya terletak di...", o: ["Awal atau akhir paragraf", "Tengah paragraf", "Seluruh paragraf", "Luar paragraf"], a: 0 },
+        { q: "Lawan kata (antonim) dari kata 'Progresif' adalah...", o: ["Aktif", "Regresif", "Maju", "Modern"], a: 1 },
+        { q: "Penulisan kata depan yang benar di bawah ini adalah...", o: ["dirumah", "di sekolah", "keatas", "disana"], a: 1 },
+        { q: "Kata yang maknanya sama atau hampir sama disebut dengan...", o: ["Antonim", "Sinonim", "Homonim", "Akronim"], a: 1 },
+        { q: "Manakah di bawah ini yang merupakan kalimat efektif?", o: ["Bagi para siswa-siswa diharapkan berkumpul.", "Siswa diharapkan berkumpul.", "Untuk semua siswa-siswa sekalian silakan berkumpul.", "Para siswa-siswa semua silakan berkumpul."], a: 1 },
+        { q: "Kalimat yang memerlukan tanggapan atau jawaban dari orang lain disebut...", o: ["Kalimat perintah", "Kalimat berita", "Kalimat tanya", "Kalimat seru"], a: 2 },
+        { q: "Buku yang berisi kumpulan peta bumi disebut...", o: ["Kamus", "Ensiklopedia", "Novel", "Atlas"], a: 3 },
+        { q: "Cerita rakyat yang mengisahkan asal-usul suatu tempat dinamakan...", o: ["Fabel", "Mitos", "Legenda", "Sage"], a: 2 },
+        { q: "Siapakah pencipta lagu kebangsaan 'Indonesia Raya'?", o: ["Ismail Marzuki", "W.R. Supratman", "Kusbini", "C. Simanjuntak"], a: 1 },
+        { q: "Rumah adat 'Tongkonan' berasal dari provinsi...", o: ["Sumatera Barat", "Sulawesi Selatan", "Papua", "Kalimantan Timur"], a: 1 },
+        { q: "Unsur intrinsik karya sastra yang merupakan pesan moral pembuat cerita disebut...", o: ["Alur", "Latar", "Amanat", "Tema"], a: 2 },
+        { q: "Kata 'Apotek' jika ditulis dalam bentuk tidak baku menjadi...", o: ["Apotik", "Apoteker", "Apotis", "Apotex"], a: 0 },
+        { q: "Majas yang membandingkan benda mati seolah-olah hidup seperti manusia dinamakan...", o: ["Majas Metafora", "Majas Personifikasi", "Majas Hiperbola", "Majas Aliterasi"], a: 1 },
+        { q: "Peribahasa 'Tong kosong nyaring bunyinya' memiliki arti...", o: ["Orang yang pelit biasanya kaya", "Orang yang bodoh biasanya banyak bicara", "Orang yang diam itu bijaksana", "Orang yang suka bernyanyi di kamar mandi"], a: 1 },
+        { q: "Penulisan huruf kapital yang benar untuk nama geografi adalah...", o: ["selat Sunda", "Selat sunda", "selat sunda", "Selat Sunda"], a: 3 },
+        { q: "Manakah kata di bawah ini yang tergolong kata baku?", o: ["Izin", "Ijin", "Nasehat", "Praktek"], a: 0 },
+        { q: "Kalimat yang menggunakan tanda baca koma (,) secara tepat adalah...", o: ["Ibu membeli bayam, aci, dan garam.", "Ibu membeli bayam aci, dan garam.", "Ibu membeli bayam, aci dan garam.", "Ibu, membeli bayam aci dan garam."], a: 0 },
+        { q: "Karya sastra yang terikat oleh bait, baris, rima, dan irama disebut...", o: ["Prosa", "Puisi", "Drama", "Novel"], a: 1 },
+        { q: "Mata uang resmi yang digunakan oleh negara Jepang adalah...", o: ["Dollar", "Yuan", "Yen", "Won"], a: 2 },
+        { q: "Alat pernapasan utama pada hewan lumba-lumba adalah...", o: ["Insang", "Paru-paru", "Kulit", "Trakea"], a: 1 },
+        { q: "Lagu daerah 'Apuse' berasal dari daerah...", o: ["Maluku", "Papua", "NTT", "Sulawesi Utara"], a: 1 },
+        { q: "Singkatan dari 'POSYANDU' adalah...", o: ["Pos Pelayanan Terpadu", "Pos Pelayanan Pemuda", "Pusat Pelayanan Terpadu", "Pos Pemeriksaan Nyaman Edukasi"], a: 0 },
+        { q: "Canti Borobudur yang merupakan candi Buddha terbesar terletak di provinsi...", o: ["Jawa Barat", "Jawa Timur", "Jawa Tengah", "Yogyakarta"], a: 2 },
+        { q: "Bahan bakar yang digunakan untuk menggerakkan pesawat terbang adalah...", o: ["Avtur", "Premium", "Solar", "Kerosene"], a: 0 },
+        { q: "Negara terluas di dunia berdasarkan total luas wilayahnya adalah...", o: ["Kanada", "Amerika Serikat", "Rusia", "Cina"], a: 2 }
     ];
 
     // --- GANTI DENGAN LINK WEB APP GOOGLE SCRIPT ANDA ---
@@ -91,7 +111,7 @@
 
     let currentIdx = 0;
     let answers = new Array(questions.length).fill(null);
-    let timeLeft = 600; // 10 menit dalam detik
+    let timeLeft = 1800; // 30 menit dalam detik (30 x 60)
     let timerInterval;
     let studentName = "";
 
@@ -209,13 +229,13 @@
 
     function sendToGoogleSheets(name, score) {
         if(GOOGLE_SCRIPT_URL === "URL_GOOGLE_SCRIPT_ANDA_DI_SINI") {
-    document.getElementById("sending-status").innerText = "Sistem penyimpanan belum dihubungkan.";
-    return;
+            document.getElementById("sending-status").innerText = "Sistem penyimpanan belum dihubungkan.";
+            return;
         }
 
         const formData = new FormData();
         formData.append("nama", name);
-        formData.append("mapel", "Matematika");
+        formData.append("mapel", "Bahasa Indonesia & Umum");
         formData.append("nilai", score);
 
         fetch(GOOGLE_SCRIPT_URL, { method: "POST", body: formData })
