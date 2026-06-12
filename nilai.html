@@ -62,9 +62,12 @@
 
             data.reverse().forEach(row => {
                 const tr = document.createElement("tr");
+                
+                // Mengubah format waktu agar rapi
                 const date = new Date(row.waktu);
                 const formattedDate = date.toLocaleDateString('id-ID') + " - " + date.toLocaleTimeString('id-ID', {hour: '2-digit', minute:'2-digit'});
 
+                // PASTIKAN BAGIAN INI MEMBACA row.nama, row.mapel, dan row.nilai
                 tr.innerHTML = `
                     <td>${formattedDate} WIB</td>
                     <td class="student-name"><strong>${row.nama}</strong></td>
